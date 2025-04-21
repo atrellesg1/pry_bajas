@@ -3,18 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>Convocatoria de Comisión de Baja</title>
+
+    <!-- Librerías externas -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- SweetAlert2 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <!-- Estilos -->
     <style>
         body {
             font-family: 'Open Sans', Arial, sans-serif;
             margin: 0;
-            background-color: #ffffff;
-            color: #1D2B4F;
             padding: 20px;
-        }
-        h2, h3 {
+            background-color: #f4f6f8;
             color: #1D2B4F;
-            font-weight: 700;
+        }
+        h2 {
+            text-align: center;
+            color: #1D2B4F;
+            font-weight: 800;
+            margin-bottom: 30px;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .card {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            flex: 1 1 400px;
+            max-width: 500px;
+            min-width: 300px;
         }
         label {
             font-weight: 600;
@@ -24,26 +48,26 @@
         input, select {
             margin-top: 5px;
             margin-bottom: 15px;
-            padding: 8px;
+            padding: 10px;
             width: 100%;
-            max-width: 500px;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
         }
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
         }
         th, td {
             border: 1px solid #ddd;
-            padding: 10px;
+            padding: 8px;
             text-align: center;
         }
         th {
             background-color: #1D2B4F;
-            color: #fff;
+            color: #ffffff;
         }
         tr:nth-child(even) {
             background-color: #f9f9f9;
@@ -51,54 +75,81 @@
         .boton {
             margin-top: 20px;
             background-color: #F39200;
-            color: #fff;
+            color: #ffffff;
             border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
+            padding: 12px 24px;
+            border-radius: 8px;
             font-weight: bold;
+            font-size: 16px;
             cursor: pointer;
+            display: block;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+        .boton:hover {
+            background-color: #d97e00;
+        }
+        .acciones-btn {
+            background-color: #d9534f;
+            border: none;
+            color: white;
+            padding: 6px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .acciones-btn:hover {
+            background-color: #c9302c;
         }
     </style>
 </head>
 <body>
 
-<div id="vistaConvocatoria">
-    <h2>Convocatoria de Comisión de Baja</h2>
+<h2>Convocatoria de Comisión de Baja</h2>
 
-    <label for="nombreConvocatoria">Nombre de la Convocatoria:</label>
-    <input type="text" id="nombreConvocatoria" value="Baja 1S 2025">
+<div class="container">
 
-    <label for="fechaConvocatoria">Fecha:</label>
-    <input type="date" id="fechaConvocatoria">
+    <div class="card">
+        <h3>Datos de la Convocatoria</h3>
+        <label for="nombreConvocatoria">Nombre de la Convocatoria:</label>
+        <input type="text" id="nombreConvocatoria" value="Baja 1S 2025">
 
-    <label for="horaInicio">Hora de Inicio:</label>
-    <input type="time" id="horaInicio">
+        <label for="fechaConvocatoria">Fecha:</label>
+        <input type="date" id="fechaConvocatoria">
 
-    <label for="horaFin">Hora de Fin:</label>
-    <input type="time" id="horaFin">
+        <label for="horaInicio">Hora de Inicio:</label>
+        <input type="time" id="horaInicio">
 
-    <h3>Seleccionar Participantes</h3>
-    <select id="selectParticipante" multiple></select>
+        <label for="horaFin">Hora de Fin:</label>
+        <input type="time" id="horaFin">
+    </div>
 
-    <h3>Participantes Seleccionados</h3>
-    <table id="tablaParticipantes">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Correo</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+    <div class="card">
+        <h3>Seleccionar Participantes</h3>
+        <label for="selectParticipante">Participantes:</label>
+        <select id="selectParticipante" multiple></select>
 
-    <button class="boton" onclick="enviarConvocatoria()">Enviar Convocatoria</button>
+        <h3>Participantes Seleccionados</h3>
+        <table id="tablaParticipantes">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<div style="max-width: 600px; margin: 30px auto;">
+    <button class="boton" onclick="confirmarEnvio()">Enviar Convocatoria</button>
+</div>
 
 <script>
+// Datos de participantes
 const participantes = [
     { nombre: 'ALMEIDA MONGE ELKA JENNIFER', correo: 'ealmeidam@unemi.edu.ec' },
     { nombre: 'ALVARADO PORRAS FRANCISCO MARCELO', correo: 'falvaradop@unemi.edu.ec' },
@@ -107,6 +158,7 @@ const participantes = [
     { nombre: 'CHIFLA VILLON MARIO RUBEN', correo: 'mchiflav@unemi.edu.ec' }
 ];
 
+// Cargar participantes en Select2
 function cargarSelectParticipantes() {
     const select = document.getElementById('selectParticipante');
     participantes.forEach((p, index) => {
@@ -124,10 +176,10 @@ function cargarSelectParticipantes() {
     $('#selectParticipante').on('change', agregarParticipantesMultiples);
 }
 
+// Agregar participantes seleccionados a la tabla
 function agregarParticipantesMultiples() {
     const selected = $('#selectParticipante').val();
     const tbody = document.getElementById('tablaParticipantes').querySelector('tbody');
-
     tbody.innerHTML = '';
 
     selected.forEach(index => {
@@ -135,14 +187,15 @@ function agregarParticipantesMultiples() {
         const fila = `<tr id="fila-${participante.nombre.replace(/\s+/g, '-')}" >
                         <td>${participante.nombre}</td>
                         <td>${participante.correo}</td>
-                        <td><button class='boton' style='padding:4px 8px; font-size:12px;' onclick='eliminarParticipante("${participante.nombre}")'>Eliminar</button></td>
+                        <td><button class='acciones-btn' onclick='eliminarParticipante("${participante.nombre}")'>Eliminar</button></td>
                       </tr>`;
         tbody.innerHTML += fila;
     });
 }
 
+// Eliminar participante de la tabla
 function eliminarParticipante(nombre) {
-    const idFila = `fila-${nombre.replace(/\s+/g, '-')}`;
+    const idFila = fila-${nombre.replace(/\s+/g, '-')};
     document.getElementById(idFila).remove();
 
     const select = $('#selectParticipante');
@@ -150,6 +203,24 @@ function eliminarParticipante(nombre) {
     select.val(options).trigger('change');
 }
 
+// Confirmar antes de enviar
+function confirmarEnvio() {
+    Swal.fire({
+        title: '¿Está seguro?',
+        text: "Se enviará la convocatoria a los participantes seleccionados.",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#1D2B4F',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, enviar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            enviarConvocatoria();
+        }
+    });
+}
+
+// Enviar convocatoria a Webhook
 function enviarConvocatoria() {
     const nombreConvocatoria = document.getElementById('nombreConvocatoria').value;
     const fecha = document.getElementById('fechaConvocatoria').value;
@@ -157,18 +228,44 @@ function enviarConvocatoria() {
     const horaFin = document.getElementById('horaFin').value;
     const participantesSeleccionados = $('#selectParticipante').val();
 
-    if (!nombreConvocatoria || !fecha || !horaInicio || !horaFin || participantesSeleccionados.length === 0) {
-        alert('Por favor, complete todos los campos y seleccione al menos un participante.');
+    if (!nombreConvocatoria || !fecha || !horaInicio || !horaFin || !participantesSeleccionados || participantesSeleccionados.length === 0) {
+        Swal.fire('Error', 'Complete todos los campos y seleccione al menos un participante.', 'error');
         return;
     }
 
-    // Simulación de envío (podrías aquí hacer una llamada a un servidor o API real)
-    alert('¡Convocatoria enviada exitosamente!\n\n' +
-          'Nombre: ' + nombreConvocatoria + '\n' +
-          'Fecha: ' + fecha + '\n' +
-          'Hora Inicio: ' + horaInicio + '\n' +
-          'Hora Fin: ' + horaFin + '\n' +
-          'Participantes seleccionados: ' + participantesSeleccionados.length);
+    const participantesDatos = participantesSeleccionados.map(index => {
+        return {
+            nombre: participantes[index].nombre,
+            correo: participantes[index].correo
+        };
+    });
+
+    const data = {
+        nombreConvocatoria: nombreConvocatoria,
+        fechaConvocatoria: fecha,
+        horaInicio: horaInicio,
+        horaFin: horaFin,
+        participantes: participantesDatos
+    };
+
+    fetch('https://hook.us2.make.com/toh1udfchmvv8p7vj2yibq2bms3zeaqe', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (response.ok) {
+            Swal.fire('Éxito', '¡Convocatoria enviada exitosamente!', 'success');
+        } else {
+            Swal.fire('Error', 'Hubo un problema al enviar la convocatoria.', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error en el envío:', error);
+        Swal.fire('Error', 'No se pudo conectar al servidor.', 'error');
+    });
 }
 
 window.onload = cargarSelectParticipantes;
