@@ -160,15 +160,15 @@
 </div>
 
 <script>
-$(document).ready(function() {
-    const participantes = [
-        { nombre: 'ALMEIDA MONGE ELKA JENNIFER', correo: 'ealmeidam@unemi.edu.ec' },
-        { nombre: 'ALVARADO PORRAS FRANCISCO MARCELO', correo: 'falvaradop@unemi.edu.ec' },
-        { nombre: 'AMEN LOOR HUGO ENRIQUE', correo: 'hamenl@unemi.edu.ec' },
-        { nombre: 'BURGOS GONZALEZ GRACIELA GERMANIA', correo: 'gburgosg@unemi.edu.ec' },
-        { nombre: 'CHIFLA VILLON MARIO RUBEN', correo: 'mchiflav@unemi.edu.ec' }
-    ];
+const participantes = [
+    { nombre: 'ALMEIDA MONGE ELKA JENNIFER', correo: 'ealmeidam@unemi.edu.ec' },
+    { nombre: 'ALVARADO PORRAS FRANCISCO MARCELO', correo: 'falvaradop@unemi.edu.ec' },
+    { nombre: 'AMEN LOOR HUGO ENRIQUE', correo: 'hamenl@unemi.edu.ec' },
+    { nombre: 'BURGOS GONZALEZ GRACIELA GERMANIA', correo: 'gburgosg@unemi.edu.ec' },
+    { nombre: 'CHIFLA VILLON MARIO RUBEN', correo: 'mchiflav@unemi.edu.ec' }
+];
 
+$(document).ready(function() {
     const select = $('#selectParticipante');
     participantes.forEach((p, i) => {
         select.append(new Option(p.nombre, i));
