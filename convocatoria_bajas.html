@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Convocatoria de Comisión de Baja</title>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Open Sans', Arial, sans-serif;
+            margin: 0;
+            background-color: #ffffff;
+            color: #1D2B4F;
+            padding: 20px;
+        }
+        h2, h3 {
+            color: #1D2B4F;
+            font-weight: 700;
+        }
+        label {
+            font-weight: 600;
+            margin-top: 10px;
+            display: block;
+        }
+        input, select {
+            margin-top: 5px;
+            margin-bottom: 15px;
+            padding: 8px;
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #1D2B4F;
+            color: #fff;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .boton {
+            margin-top: 20px;
+            background-color: #F39200;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div id="vistaConvocatoria">
+    <h2>Convocatoria de Comisión de Baja</h2>
+
+    <label for="nombreConvocatoria">Nombre de la Convocatoria:</label>
+    <input type="text" id="nombreConvocatoria" value="Baja 1S 2025">
+
+    <label for="fechaConvocatoria">Fecha:</label>
+    <input type="date" id="fechaConvocatoria">
+
+    <label for="horaInicio">Hora de Inicio:</label>
+    <input type="time" id="horaInicio">
+
+    <label for="horaFin">Hora de Fin:</label>
+    <input type="time" id="horaFin">
+
+    <h3>Seleccionar Participantes</h3>
+    <select id="selectParticipante" multiple></select>
+
+    <h3>Participantes Seleccionados</h3>
+    <table id="tablaParticipantes">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <button class="boton" onclick="enviarConvocatoria()">Enviar Convocatoria</button>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+const participantes = [
+    { nombre: 'ALMEIDA MONGE ELKA JENNIFER', correo: 'ealmeidam@unemi.edu.ec' },
+    { nombre: 'ALVARADO PORRAS FRANCISCO MARCELO', correo: 'falvaradop@unemi.edu.ec' },
+    { nombre: 'AMEN LOOR HUGO ENRIQUE', correo: 'hamenl@unemi.edu.ec' },
+    { nombre: 'BURGOS GONZALEZ GRACIELA GERMANIA', correo: 'gburgosg@unemi.edu.ec' },
+    { nombre: 'CHIFLA VILLON MARIO RUBEN', correo: 'mchiflav@unemi.edu.ec' }
+];
+
+function cargarSelectParticipantes() {
+    const select = document.getElementById('selectParticipante');
+    participantes.forEach((p, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.text = p.nombre;
+        select.add(option);
+    });
+
+    $('#selectParticipante').select2({
+        placeholder: "Seleccione participantes...",
+        allowClear: true
+    });
+
+    $('#selectParticipante').on('change', agregarParticipantesMultiples);
+}
+
+function agregarParticipantesMultiples() {
+    const selected = $('#selectParticipante').val();
+    const tbody = document.getElementById('tablaParticipantes').querySelector('tbody');
+
+    tbody.innerHTML = '';
+
+    selected.forEach(index => {
+        const participante = participantes[index];
+        const fila = `<tr id="fila-${participante.nombre.replace(/\s+/g, '-')}" >
+                        <td>${participante.nombre}</td>
+                        <td>${participante.correo}</td>
+                        <td><button class='boton' style='padding:4px 8px; font-size:12px;' onclick='eliminarParticipante("${participante.nombre}")'>Eliminar</button></td>
+                      </tr>`;
+        tbody.innerHTML += fila;
+    });
+}
+
+function eliminarParticipante(nombre) {
+    const idFila = `fila-${nombre.replace(/\s+/g, '-')}`;
+    document.getElementById(idFila).remove();
+
+    const select = $('#selectParticipante');
+    const options = select.val().filter(value => participantes[value].nombre !== nombre);
+    select.val(options).trigger('change');
+}
+
+function enviarConvocatoria() {
+    const nombreConvocatoria = document.getElementById('nombreConvocatoria').value;
+    const fecha = document.getElementById('fechaConvocatoria').value;
+    const horaInicio = document.getElementById('horaInicio').value;
+    const horaFin = document.getElementById('horaFin').value;
+    const participantesSeleccionados = $('#selectParticipante').val();
+
+    if (!nombreConvocatoria || !fecha || !horaInicio || !horaFin || participantesSeleccionados.length === 0) {
+        alert('Por favor, complete todos los campos y seleccione al menos un participante.');
+        return;
+    }
+
+    // Simulación de envío (podrías aquí hacer una llamada a un servidor o API real)
+    alert('¡Convocatoria enviada exitosamente!\n\n' +
+          'Nombre: ' + nombreConvocatoria + '\n' +
+          'Fecha: ' + fecha + '\n' +
+          'Hora Inicio: ' + horaInicio + '\n' +
+          'Hora Fin: ' + horaFin + '\n' +
+          'Participantes seleccionados: ' + participantesSeleccionados.length);
+}
+
+window.onload = cargarSelectParticipantes;
+</script>
+
+</body>
+</html>
