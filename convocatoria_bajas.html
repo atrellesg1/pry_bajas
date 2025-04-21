@@ -160,7 +160,6 @@
 </div>
 
 <script>
-// Código de funcionalidad que ya tienes cargando participantes, select2 y sweetalert
 $(document).ready(function() {
     const participantes = [
         { nombre: 'ALMEIDA MONGE ELKA JENNIFER', correo: 'ealmeidam@unemi.edu.ec' },
@@ -199,7 +198,7 @@ $(document).ready(function() {
 });
 
 function eliminarParticipante(index) {
-    $(#fila-${index}).remove();
+    $(`#fila-${index}`).remove();
 
     let seleccionados = $('#selectParticipante').val();
     seleccionados = seleccionados.filter(i => i != index);
