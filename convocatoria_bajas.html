@@ -4,17 +4,15 @@
     <meta charset="UTF-8">
     <title>Convocatoria de Comisión de Baja</title>
 
-    <!-- Librerías externas -->
+    <!-- Estilos y librerías externas -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- SweetAlert2 -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- Estilos -->
     <style>
         body {
             font-family: 'Open Sans', Arial, sans-serif;
-            margin: 0;
             padding: 20px;
             background-color: #f4f6f8;
             color: #1D2B4F;
@@ -23,7 +21,6 @@
             text-align: center;
             color: #1D2B4F;
             font-weight: 800;
-            margin-bottom: 30px;
         }
         .container {
             display: flex;
@@ -32,13 +29,12 @@
             justify-content: center;
         }
         .card {
-            background: #ffffff;
+            background: #fff;
             border-radius: 12px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
             flex: 1 1 400px;
             max-width: 500px;
-            min-width: 300px;
         }
         label {
             font-weight: 600;
@@ -58,7 +54,6 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 10px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
         }
         th, td {
             border: 1px solid #ddd;
@@ -67,27 +62,19 @@
         }
         th {
             background-color: #1D2B4F;
-            color: #ffffff;
-        }
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
+            color: #fff;
         }
         .boton {
             margin-top: 20px;
             background-color: #F39200;
-            color: #ffffff;
+            color: #fff;
             border: none;
             padding: 12px 24px;
             border-radius: 8px;
             font-weight: bold;
             font-size: 16px;
             cursor: pointer;
-            display: block;
             width: 100%;
-            transition: background-color 0.3s ease;
-        }
-        .boton:hover {
-            background-color: #d97e00;
         }
         .acciones-btn {
             background-color: #d9534f;
@@ -98,9 +85,6 @@
             font-size: 12px;
             cursor: pointer;
         }
-        .acciones-btn:hover {
-            background-color: #c9302c;
-        }
     </style>
 </head>
 <body>
@@ -108,7 +92,6 @@
 <h2>Convocatoria de Comisión de Baja</h2>
 
 <div class="container">
-
     <div class="card">
         <h3>Datos de la Convocatoria</h3>
         <label for="nombreConvocatoria">Nombre de la Convocatoria:</label>
@@ -141,7 +124,6 @@
             <tbody></tbody>
         </table>
     </div>
-
 </div>
 
 <div style="max-width: 600px; margin: 30px auto;">
@@ -158,117 +140,97 @@ const participantes = [
     { nombre: 'CHIFLA VILLON MARIO RUBEN', correo: 'mchiflav@unemi.edu.ec' }
 ];
 
-// Cargar participantes en Select2
+// Cargar participantes y activar Select2
 function cargarSelectParticipantes() {
-    const select = document.getElementById('selectParticipante');
-    participantes.forEach((p, index) => {
-        const option = document.createElement('option');
-        option.value = index;
-        option.text = p.nombre;
-        select.add(option);
-    });
-
-    $('#selectParticipante').select2({
-        placeholder: "Seleccione participantes...",
-        allowClear: true
-    });
-
-    $('#selectParticipante').on('change', agregarParticipantesMultiples);
-}
-
-// Agregar participantes seleccionados a la tabla
-function agregarParticipantesMultiples() {
-    const selected = $('#selectParticipante').val();
-    const tbody = document.getElementById('tablaParticipantes').querySelector('tbody');
-    tbody.innerHTML = '';
-
-    selected.forEach(index => {
-        const participante = participantes[index];
-        const fila = `<tr id="fila-${participante.nombre.replace(/\s+/g, '-')}" >
-                        <td>${participante.nombre}</td>
-                        <td>${participante.correo}</td>
-                        <td><button class='acciones-btn' onclick='eliminarParticipante("${participante.nombre}")'>Eliminar</button></td>
-                      </tr>`;
-        tbody.innerHTML += fila;
-    });
-}
-
-// Eliminar participante de la tabla
-function eliminarParticipante(nombre) {
-    const idFila = fila-${nombre.replace(/\s+/g, '-')};
-    document.getElementById(idFila).remove();
-
     const select = $('#selectParticipante');
-    const options = select.val().filter(value => participantes[value].nombre !== nombre);
-    select.val(options).trigger('change');
+    participantes.forEach((p, i) => {
+        select.append(new Option(p.nombre, i));
+    });
+
+    select.select2({
+        placeholder: "Seleccione participantes...",
+        width: '100%'
+    });
+
+    select.on('change', agregarParticipantesMultiples);
 }
 
-// Confirmar antes de enviar
+// Agregar participantes a tabla
+function agregarParticipantesMultiples() {
+    const seleccionados = $('#selectParticipante').val();
+    const tbody = $('#tablaParticipantes tbody');
+    tbody.empty();
+
+    seleccionados.forEach(i => {
+        const p = participantes[i];
+        const idFila = `fila-${i}`;
+        tbody.append(`
+            <tr id="${idFila}">
+                <td>${p.nombre}</td>
+                <td>${p.correo}</td>
+                <td><button class="acciones-btn" onclick="eliminarParticipante(${i})">Eliminar</button></td>
+            </tr>
+        `);
+    });
+}
+
+// Eliminar de tabla y actualizar Select2
+function eliminarParticipante(index) {
+    $(`#fila-${index}`).remove();
+
+    let seleccionados = $('#selectParticipante').val();
+    seleccionados = seleccionados.filter(i => i != index);
+    $('#selectParticipante').val(seleccionados).trigger('change');
+}
+
+// Confirmar envío
 function confirmarEnvio() {
     Swal.fire({
         title: '¿Está seguro?',
         text: "Se enviará la convocatoria a los participantes seleccionados.",
         icon: 'question',
         showCancelButton: true,
-        confirmButtonColor: '#1D2B4F',
-        cancelButtonColor: '#d33',
         confirmButtonText: 'Sí, enviar'
-    }).then((result) => {
+    }).then(result => {
         if (result.isConfirmed) {
             enviarConvocatoria();
         }
     });
 }
 
-// Enviar convocatoria a Webhook
+// Enviar datos
 function enviarConvocatoria() {
-    const nombreConvocatoria = document.getElementById('nombreConvocatoria').value;
-    const fecha = document.getElementById('fechaConvocatoria').value;
-    const horaInicio = document.getElementById('horaInicio').value;
-    const horaFin = document.getElementById('horaFin').value;
-    const participantesSeleccionados = $('#selectParticipante').val();
+    const nombre = $('#nombreConvocatoria').val();
+    const fecha = $('#fechaConvocatoria').val();
+    const inicio = $('#horaInicio').val();
+    const fin = $('#horaFin').val();
+    const seleccionados = $('#selectParticipante').val();
 
-    if (!nombreConvocatoria || !fecha || !horaInicio || !horaFin || !participantesSeleccionados || participantesSeleccionados.length === 0) {
-        Swal.fire('Error', 'Complete todos los campos y seleccione al menos un participante.', 'error');
+    if (!nombre || !fecha || !inicio || !fin || !seleccionados.length) {
+        Swal.fire('Error', 'Complete todos los campos.', 'error');
         return;
     }
 
-    const participantesDatos = participantesSeleccionados.map(index => {
-        return {
-            nombre: participantes[index].nombre,
-            correo: participantes[index].correo
-        };
-    });
-
-    const data = {
-        nombreConvocatoria: nombreConvocatoria,
+    const datos = seleccionados.map(i => participantes[i]);
+    const payload = {
+        nombreConvocatoria: nombre,
         fechaConvocatoria: fecha,
-        horaInicio: horaInicio,
-        horaFin: horaFin,
-        participantes: participantesDatos
+        horaInicio: inicio,
+        horaFin: fin,
+        participantes: datos
     };
 
     fetch('https://hook.us2.make.com/toh1udfchmvv8p7vj2yibq2bms3zeaqe', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
     })
-    .then(response => {
-        if (response.ok) {
-            Swal.fire('Éxito', '¡Convocatoria enviada exitosamente!', 'success');
-        } else {
-            Swal.fire('Error', 'Hubo un problema al enviar la convocatoria.', 'error');
-        }
-    })
-    .catch(error => {
-        console.error('Error en el envío:', error);
-        Swal.fire('Error', 'No se pudo conectar al servidor.', 'error');
-    });
+    .then(r => r.ok ? Swal.fire('Éxito', 'Convocatoria enviada', 'success') : Swal.fire('Error', 'No se pudo enviar', 'error'))
+    .catch(() => Swal.fire('Error', 'Error de conexión', 'error'));
 }
 
-window.onload = cargarSelectParticipantes;
+// Iniciar
+$(document).ready(cargarSelectParticipantes);
 </script>
 
 </body>
