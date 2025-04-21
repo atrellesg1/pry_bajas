@@ -13,20 +13,44 @@
     <style>
         body {
             font-family: 'Open Sans', Arial, sans-serif;
-            padding: 20px;
+            padding: 0;
+            margin: 0;
             background-color: #f4f6f8;
             color: #1D2B4F;
+        }
+        .franja-superior {
+            background-color: #1D2B4F;
+            height: 40px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding-left: 20px;
+        }
+        .franja-superior span {
+            color: white;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 18px;
+            letter-spacing: 1px;
+        }
+        .franja-naranja {
+            background-color: #F39200;
+            height: 15px;
+            width: 100%;
         }
         h2 {
             text-align: center;
             color: #1D2B4F;
             font-weight: 800;
+            margin-top: 20px;
         }
         .container {
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
             justify-content: center;
+            padding: 20px;
         }
         .card {
             background: #fff;
@@ -89,6 +113,11 @@
 </head>
 <body>
 
+<div class="franja-superior">
+    <span>UNEMI</span>
+</div>
+<div class="franja-naranja"></div>
+
 <h2>Convocatoria de Comisión de Baja</h2>
 
 <div class="container">
@@ -131,17 +160,16 @@
 </div>
 
 <script>
-// Datos de participantes
-const participantes = [
-    { nombre: 'ALMEIDA MONGE ELKA JENNIFER', correo: 'ealmeidam@unemi.edu.ec' },
-    { nombre: 'ALVARADO PORRAS FRANCISCO MARCELO', correo: 'falvaradop@unemi.edu.ec' },
-    { nombre: 'AMEN LOOR HUGO ENRIQUE', correo: 'hamenl@unemi.edu.ec' },
-    { nombre: 'BURGOS GONZALEZ GRACIELA GERMANIA', correo: 'gburgosg@unemi.edu.ec' },
-    { nombre: 'CHIFLA VILLON MARIO RUBEN', correo: 'mchiflav@unemi.edu.ec' }
-];
+// Código de funcionalidad que ya tienes cargando participantes, select2 y sweetalert
+$(document).ready(function() {
+    const participantes = [
+        { nombre: 'ALMEIDA MONGE ELKA JENNIFER', correo: 'ealmeidam@unemi.edu.ec' },
+        { nombre: 'ALVARADO PORRAS FRANCISCO MARCELO', correo: 'falvaradop@unemi.edu.ec' },
+        { nombre: 'AMEN LOOR HUGO ENRIQUE', correo: 'hamenl@unemi.edu.ec' },
+        { nombre: 'BURGOS GONZALEZ GRACIELA GERMANIA', correo: 'gburgosg@unemi.edu.ec' },
+        { nombre: 'CHIFLA VILLON MARIO RUBEN', correo: 'mchiflav@unemi.edu.ec' }
+    ];
 
-// Cargar participantes y activar Select2
-function cargarSelectParticipantes() {
     const select = $('#selectParticipante');
     participantes.forEach((p, i) => {
         select.append(new Option(p.nombre, i));
@@ -152,38 +180,32 @@ function cargarSelectParticipantes() {
         width: '100%'
     });
 
-    select.on('change', agregarParticipantesMultiples);
-}
+    select.on('change', function() {
+        const seleccionados = $(this).val();
+        const tbody = $('#tablaParticipantes tbody');
+        tbody.empty();
 
-// Agregar participantes a tabla
-function agregarParticipantesMultiples() {
-    const seleccionados = $('#selectParticipante').val();
-    const tbody = $('#tablaParticipantes tbody');
-    tbody.empty();
-
-    seleccionados.forEach(i => {
-        const p = participantes[i];
-        const idFila = `fila-${i}`;
-        tbody.append(`
-            <tr id="${idFila}">
-                <td>${p.nombre}</td>
-                <td>${p.correo}</td>
-                <td><button class="acciones-btn" onclick="eliminarParticipante(${i})">Eliminar</button></td>
-            </tr>
-        `);
+        seleccionados.forEach(i => {
+            const p = participantes[i];
+            tbody.append(`
+                <tr id="fila-${i}">
+                    <td>${p.nombre}</td>
+                    <td>${p.correo}</td>
+                    <td><button class="acciones-btn" onclick="eliminarParticipante(${i})">Eliminar</button></td>
+                </tr>
+            `);
+        });
     });
-}
+});
 
-// Eliminar de tabla y actualizar Select2
 function eliminarParticipante(index) {
-    $(`#fila-${index}`).remove();
+    $(#fila-${index}).remove();
 
     let seleccionados = $('#selectParticipante').val();
     seleccionados = seleccionados.filter(i => i != index);
     $('#selectParticipante').val(seleccionados).trigger('change');
 }
 
-// Confirmar envío
 function confirmarEnvio() {
     Swal.fire({
         title: '¿Está seguro?',
@@ -198,7 +220,6 @@ function confirmarEnvio() {
     });
 }
 
-// Enviar datos
 function enviarConvocatoria() {
     const nombre = $('#nombreConvocatoria').val();
     const fecha = $('#fechaConvocatoria').val();
@@ -228,9 +249,6 @@ function enviarConvocatoria() {
     .then(r => r.ok ? Swal.fire('Éxito', 'Convocatoria enviada', 'success') : Swal.fire('Error', 'No se pudo enviar', 'error'))
     .catch(() => Swal.fire('Error', 'Error de conexión', 'error'));
 }
-
-// Iniciar
-$(document).ready(cargarSelectParticipantes);
 </script>
 
 </body>
