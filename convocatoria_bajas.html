@@ -21,13 +21,19 @@
             border-radius: 0.700rem;
             padding: 0.700rem;
         }
+        .logo-tigre {
+            height: 60px;
+            object-fit: contain;
+           
+        }
         .logo-unemi {
             height: 50px;
             object-fit: contain;
+           
         }
         .franja-superior {
             background-color: #1D2B4F;
-            padding: 10px 20px;
+           
             color: white;
             font-size: 24px;
             font-weight: bold;
@@ -46,16 +52,29 @@
 </head>
 <body>
 
-    <!-- Encabezado -->
-    <div class="franja-superior d-flex align-items-center">
-        <img src="img/logo-unemi.png" alt="Logo" class="logo-unemi me-3">
+
+<!-- Encabezado -->
+<div class="franja-superior d-flex justify-content-between align-items-center px-3">
+    <!-- Izquierda -->
+    <div class="d-flex align-items-center">
+        <img src="C:\Users\ASEG_CALIDAD\Downloads\logo-unemi.png" alt="Logo" class="logo-tigre">
     </div>
+
+    <!-- Centro -->
+    <div class="text-center flex-grow-1">
+        <h2 style="color:white" class="fw-bold mb-0">Convocatoria de Comisión de Baja</h2>
+    </div>
+
+    <!-- Derecha -->
+    <div class="d-flex align-items-center justify-content-end">
+        <img src="C:\Users\ASEG_CALIDAD\Downloads\unemi-logo.png" alt="Logo" class="logo-unemi">
+    </div>
+</div>
     <div class="franja-naranja"></div>
 
 
    <div class="container mt-12">
-        <h2 style="color:#1D2B4F" class="text-center fw-bold mb-4">Convocatoria de Comisión de Baja</h2>
-        <div class="row g-4">
+        <div class="row mt-3">
             <!-- Formulario de datos -->
             <div class="col-md-4">
                 <div class="card shadow-sm mb-3">
